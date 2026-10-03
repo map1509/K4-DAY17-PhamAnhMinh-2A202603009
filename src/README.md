@@ -1,19 +1,13 @@
-# Student Scaffold
+﻿# Source implementation
 
-This `src/` folder is the student version of the lab.
+Các module dùng import phẳng; chạy lệnh từ root repo:
 
-- It keeps the same high-level structure
-- The Python files are intentionally incomplete and contain pseudocode / TODOs
-- The benchmark structure should include: standard benchmark + long-context stress benchmark
-- The runtime should support these providers: `openai`, `custom`, `gemini`, `anthropic`, `ollama`, `openrouter`
+- python src/benchmark.py: hai bảng offline, không cần API key.
+- pytest src/test_agents.py -v: bốn test tích hợp trên tmp_path.
+- python -m pytest src -q: toàn bộ test.
+- python src/bonus_benchmark.py: đối chứng Conflict handling.
 
-Suggested flow:
-
-1. Start with `config.py`
-2. Implement `memory_store.py`
-3. Finish `agent_baseline.py`
-4. Finish `agent_advanced.py`
-5. Implement `benchmark.py`
-6. Make `test_agents.py` pass
-
-Datasets are available at the repo root in `data/`.
+Thứ tự phụ thuộc: model_provider/config -> memory_store -> agents -> benchmark.
+Advanced tái sử dụng formatter recall của Baseline, nhưng lấy profile
+bền vững và compact context. state/ tự sinh, không phải input bài nộp.
+Phân tích và thiết lập môi trường ở README.md, STEP8.md và Analysis.md.
