@@ -190,7 +190,7 @@ cách ly user và summary có giới hạn. Đường dẫn user được chuẩ
 resolve trong root; thread Advanced không dùng chung giữa hai user;
 assistant không được trích thành fact; query không tự tạo hồ sơ rỗng.
 Các guardrail đó đã có test, nhưng chưa có concurrent writes, memory decay
-hay xác minh độ tin cậy của fact; chế độ live chưa được đo bằng API thật.
+hay xác minh độ tin cậy của fact; benchmark chính vẫn đo offline.
 
 ## Đối chiếu Rubric và kiểm tra
 
@@ -249,4 +249,24 @@ langchain-anthropic, langchain-ollama, langchain-openrouter; chúng không
 bắt buộc cho offline. Custom cần base URL, dùng key placeholder nếu
 endpoint không xác thực. Constructor đã đối chiếu tài liệu
 [LangChain](https://docs.langchain.com/oss/python/langchain/models);
-kiểm tra live hiện dùng mock.
+unit test live dùng mock; phép kiểm tra API thật được ghi dưới đây.
+
+## Kiểm tra live bằng Gemini API thật
+
+Ngày 04/10/2026, đã kiểm tra nhánh live của cả hai agent, không cho fallback
+offline và dùng profile riêng trong state/live-tests/. Gemini 3.8 Flash
+trả được response nhưng nhiều lượt tiếp theo gặp 503 tải cao, kể cả retry;
+Gemini 2.5 Flash trả 404 không còn khả dụng cho tài khoản này. Không thay
+đổi model hoặc key trong .env của người dùng.
+
+Sau khi đọc danh sách model từ API, thử cùng bộ kiểm tra với
+gemini-flash-lite-latest: 10/10 check pass. Bao gồm model thật của hai
+agent, Baseline nhớ trong thread và quên ở thread mới, Advanced ghi
+profile thật và recall ở thread mới, correction Huế sang Đà Nẵng,
+một dòng location trên đĩa, compact kích hoạt, token được ghi, và recall
+qua một instance Advanced mới. Toàn bộ 33 test offline cũng pass.
+
+Đây là smoke test hành vi bằng API thật trên một kịch bản ngắn, không phải
+benchmark live toàn bộ hai dataset hoặc kiểm tra sáu provider. Bộ kiểm tra
+đầy đủ với model 3.8 Flash vẫn chưa hoàn tất do 503 dịch vụ. Không dùng số
+live này để thay các bảng token/quality offline ở trên; key không ghi log.
