@@ -221,6 +221,9 @@ Kết quả cuối: **33 test pass**, gồm 4 test scaffold và test đối ch�
 ## Quy ước cấu hình
 
 load_config đọc root/.env bằng python-dotenv; môi trường sẵn có ưu tiên.
+Nếu không có .env, không import python-dotenv: benchmark offline chạy bằng
+thư viện chuẩn khi bản sao chỉ có src/ và data/. Test cần pytest như công
+cụ chạy test; không cần API key, SDK hay requirements.txt của repo.
 base/data/state cùng một root; tạo state khi nạp config. SDK được import
 khi dựng model live; force_offline bỏ qua factory.
 

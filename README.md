@@ -13,11 +13,17 @@ User.md và compact lịch sử dài. Chạy offline tất định, không cần
 - STEP8.md: trả lời bốn câu hỏi phân tích Bước 8.
 - Analysis.md: phân tích chi tiết, phương pháp đo, bonus và giới hạn.
 - BenchmarkOutput.md, BonusOutput.md: output đã đo.
-- requirements.txt: dependency tối thiểu để chạy offline và test.
+- requirements.txt: pytest cho test và python-dotenv để đọc .env tùy chọn.
 
 ## Cài đặt và chạy
 
 Python >= 3.11. Từ thư mục gốc repo:
+
+Chỉ cần src/ và data/ để chạy benchmark offline; không cần requirements.txt,
+.env, API key hay package ngoài thư viện chuẩn. Nếu chỉ có hai thư mục này,
+chạy python src/benchmark.py; để chạy test, cài pytest bằng
+python -m pip install pytest rồi chạy pytest src/test_agents.py -v.
+python-dotenv chỉ cần khi chủ động thêm .env; SDK chỉ cần cho live.
 
 ```powershell
 python -m pip install -r requirements.txt

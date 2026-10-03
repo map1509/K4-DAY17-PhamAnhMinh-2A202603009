@@ -5,7 +5,6 @@ import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from dotenv import load_dotenv
 from model_provider import ProviderConfig, normalize_provider
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -64,7 +63,13 @@ def _provider_config(prefix: str, fallback: ProviderConfig | None = None) -> Pro
 def load_config(base_dir: Path | None = None) -> LabConfig:
     """Read root/.env without overriding environment; no SDK or API key needed."""
     root = (base_dir or REPO_ROOT).resolve()
-    load_dotenv(root / ".env", override=False, encoding="utf-8")
+    env_path = root / ".env"
+    if env_path.is_file():
+        try:
+            from dotenv import load_dotenv
+        except ImportError as exc:
+            raise ImportError("Reading .env requires python-dotenv: python -m pip install python-dotenv") from exc
+        load_dotenv(env_path, override=False, encoding="utf-8")
     model = _provider_config("LLM")
     judge_model = _provider_config("JUDGE", model)
     threshold = _positive_int("COMPACT_THRESHOLD_TOKENS", 2000)
